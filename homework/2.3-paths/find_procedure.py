@@ -44,8 +44,41 @@
 import glob
 import os.path
 
-migrations = 'Migrations'
+def chdir():
+	os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
-files = glob.glob(os.path.join(migrations, "*.sql"))
-for file in files:
-	print(file)
+def get_file_list(name_dir):
+	migrations = name_dir
+	files = glob.glob(os.path.join(migrations, "*.sql"))
+	return files
+
+def finder (name_dir = 'Migrations'):
+	file_list = []
+	for file in get_file_list(name_dir):
+		file_list.append(file)
+			#print(len(file_list))
+
+	while True:
+		user_input = input('Введите текст(q для выхода): ').lower()
+		file_list_2 = []
+		if user_input == 'q':
+			break
+		else:
+			for file_with_text in file_list:	
+				with open(file_with_text) as f2:
+					if not user_input.lower() in f2.read().lower():
+						file_list_2.append(file_with_text)
+						#print(file_with_text)
+			file_list = list(set(file_list) - set(file_list_2))
+			if len(file_list) == 0:
+				file_list = file_list_2
+				print(*file_list, len(file_list), sep = '\n')
+				print('Совпадений не найдено, попробуйте еще раз')
+			else:
+				print(*file_list, len(file_list), sep = '\n')
+
+
+chdir()
+finder('Advanced Migrations')
+
+
