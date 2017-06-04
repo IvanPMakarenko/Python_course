@@ -52,31 +52,24 @@ def get_file_list(name_dir):
 	files = glob.glob(os.path.join(migrations, "*.sql"))
 	return files
 
-def finder (name_dir = 'Migrations'):
-	file_list = []
-	for file in get_file_list(name_dir):
-		file_list.append(file)
-			#print(len(file_list))
-
+def finder (name_dir='Migrations'):
+	file_list = get_file_list(name_dir)
 	while True:
 		user_input = input('Введите текст(q для выхода): ').lower()
-		file_list_2 = []
+		files_with_user_text = []
 		if user_input == 'q':
 			break
 		else:
 			for file_with_text in file_list:	
-				with open(file_with_text) as f2:
-					if not user_input.lower() in f2.read().lower():
-						file_list_2.append(file_with_text)
+				with open(file_with_text) as opened_sql_file:
+					if user_input.lower() in opened_sql_file.read().lower():
+						files_with_user_text.append(file_with_text)
 						#print(file_with_text)
-			file_list = list(set(file_list) - set(file_list_2))
-			if len(file_list) == 0:
-				file_list = file_list_2
-				print(*file_list, len(file_list), sep = '\n')
-				print('Совпадений не найдено, попробуйте еще раз')
+			if len(files_with_user_text) == 0:
+				print('Список файлов: {0}{1}Кол-во найденных результатов: {2}{1}Совпадений с {3} не найдено! Попробуйте снова!'.format('\n'.join(file_list), '\n', len(file_list), user_input))
 			else:
-				print(*file_list, len(file_list), sep = '\n')
-
+				file_list = files_with_user_text
+				print('Список файлов: {0}{1}Кол-во найденных результатов: {2}'.format('\n'.join(file_list), '\n', len(file_list)))
 
 chdir()
 finder('Advanced Migrations')
