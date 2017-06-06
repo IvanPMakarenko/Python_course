@@ -22,8 +22,8 @@ def converter_program():
 	change_and_create_dir(output_directory)
 	#list_of_files =  os.listdir('Source')
 	for file in get_file_list(input_derectory):
-		banana =  'convert ' + file + ' -resize 200 ' + re.sub(input_derectory, output_directory, file)
-		process = subprocess.run(banana)
+		args_for_convert =  'convert ' + file + ' -resize 200 ' + re.sub(input_derectory, output_directory, file)
+		process = subprocess.run(args_for_convert)
 	print('Done!')
 
 converter_program()
